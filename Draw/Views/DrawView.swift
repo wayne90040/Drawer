@@ -30,7 +30,6 @@ struct DrawView: View {
             }
         }
         .frame(width: 512, height: 512)
-//        .frame(width: 512, height: 768)
         .gesture(drag)
     }
     
@@ -41,14 +40,15 @@ struct DrawView: View {
                 Slider(value: $lineWidth, in: 1...20) {
                     Text("Line width")
                 }
-                .onChange(of: lineWidth) { oldValue, newValue in
-                    currentLine.lineWidth = newValue
-                }
+                .onChange(of: lineWidth, perform: {
+                    currentLine.lineWidth = $0
+                })
                 Divider()
+                
                 ColorPanelView(selected: $currentLine.color)
-                    .onChange(of: currentLine.color) { oldValue, newValue in
-                        currentLine.color = newValue
-                    }
+                    .onChange(of: currentLine.color, perform: {
+                        currentLine.color = $0
+                    })
                 Divider()
                 VStack {
                     Button("Generate") {

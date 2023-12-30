@@ -68,7 +68,7 @@ class PipelineLoader {
         configuration.computeUnits = computeUnits
         let pipeline: StableDiffusionPipelineProtocol
         
-        if coreModel.isXL {
+        if coreModel.isXL, #available(macOS 14.0, *) {
             pipeline = try StableDiffusionXLPipeline(
                 resourcesAt: url,
                 configuration: configuration,

@@ -17,7 +17,7 @@ class ModelPickerController: ObservableObject {
     
     private let maxSeed: UInt32 = UInt32.max // TODO: -
     
-    func onChange(from oldState: CoreModel, to newState: CoreModel) {
+    func onChange(from oldState: CoreModel? = nil, to newState: CoreModel) {
         guard !newState.name.isEmpty else {
             return
         }
@@ -76,8 +76,8 @@ struct ModelPickerView: View {
                     Text(verbatim: $0.name).tag($0.name)
                 }
             }
-            .onChange(of: controller.selection, { oldValue, newValue in
-                controller.onChange(from: oldValue, to: newValue)
+            .onChange(of: controller.selection, perform: {
+                controller.onChange(to: $0)
             })
             .disabled(controller.isLoading)
             .labelsHidden()

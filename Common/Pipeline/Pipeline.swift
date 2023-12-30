@@ -7,7 +7,12 @@ class Pipeline {
     let maxSeed: UInt32
     
     var isXL: Bool {
-        (pipeline as? StableDiffusionXLPipeline) != nil
+        if #available(macOS 14.0, *) {
+            return (pipeline as? StableDiffusionXLPipeline) != nil
+        } 
+        else {
+            return false
+        }
     }
     
     var progress: StableDiffusionProgress? = nil {
