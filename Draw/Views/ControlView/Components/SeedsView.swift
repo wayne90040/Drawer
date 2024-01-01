@@ -6,9 +6,16 @@ struct SeedsView: View {
     @EnvironmentObject var context: GenerationContext
     
     var body: some View {
-        Text("Seeds")
-            .style(.control)
-        
+        HStack {
+            Text("Seeds")
+                .style(.control)
+            InfoButton {
+                VStack {
+                    Text("Random seed which to start generation")
+                }
+                .padding()
+            }
+        }
         createSeedSlider()
     }
     

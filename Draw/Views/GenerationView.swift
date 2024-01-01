@@ -9,6 +9,7 @@ struct GenerationView: View {
 
         switch generationContext.state {
         case .startup:
+//            Image("a_high_quality_photo_of_a_surfing_dog.7667.final_3.41-bits.png")
             Text("start up")
             
         case .running(let progress):

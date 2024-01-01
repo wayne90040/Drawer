@@ -11,7 +11,7 @@ enum AttentionVariant: String {
 
 class PipelineLoader {
     
-    static let baseURL: String = "file:///Users/user/Developer"
+//    static let baseURL: String = "file:///Users/user/Developer"
     
     private let coreModel: CoreModel
     private let computeUnits: MLComputeUnits
@@ -48,6 +48,12 @@ class PipelineLoader {
     func load() async throws -> Pipeline {
         let pipeline = try await load(url: coreModelURL)
         return .init(pipeline, maxSeed: maxSeed)
+    }
+    
+    func testLoading() async {
+        state = .loading
+        sleep(5)
+        state = .loaded
     }
     
     private var coreModelURL: URL {

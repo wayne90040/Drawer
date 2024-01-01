@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68CF51502B3FD13100CE5C67 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CF514F2B3FD13100CE5C67 /* View+Extensions.swift */; };
+		68CF51542B3FF0FA00CE5C67 /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CF51532B3FF0FA00CE5C67 /* Double+Extensions.swift */; };
+		68CF51562B42B11600CE5C67 /* InfoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CF51552B42B11600CE5C67 /* InfoButton.swift */; };
 		CE5F68602B2C3D3C004C9FD2 /* DrawApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5F685F2B2C3D3C004C9FD2 /* DrawApp.swift */; };
 		CE5F68622B2C3D3C004C9FD2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5F68612B2C3D3C004C9FD2 /* ContentView.swift */; };
 		CE5F68642B2C3D3C004C9FD2 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5F68632B2C3D3C004C9FD2 /* Item.swift */; };
@@ -65,6 +68,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		68CF514F2B3FD13100CE5C67 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		68CF51532B3FF0FA00CE5C67 /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
+		68CF51552B42B11600CE5C67 /* InfoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoButton.swift; sourceTree = "<group>"; };
 		CE5F685C2B2C3D3C004C9FD2 /* Draw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Draw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5F685F2B2C3D3C004C9FD2 /* DrawApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawApp.swift; sourceTree = "<group>"; };
 		CE5F68612B2C3D3C004C9FD2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -144,6 +150,46 @@
 			path = Styles;
 			sourceTree = "<group>";
 		};
+		68CF514B2B3FCAE900CE5C67 /* ControlView */ = {
+			isa = PBXGroup;
+			children = (
+				68CF514D2B3FCB3B00CE5C67 /* Components */,
+				CE73BD142B341DE6004B8AD8 /* ControlView.swift */,
+			);
+			path = ControlView;
+			sourceTree = "<group>";
+		};
+		68CF514C2B3FCB1E00CE5C67 /* DrawView */ = {
+			isa = PBXGroup;
+			children = (
+				68CF514E2B3FCB5500CE5C67 /* Components */,
+				CE5F688F2B2C4515004C9FD2 /* DrawView.swift */,
+			);
+			path = DrawView;
+			sourceTree = "<group>";
+		};
+		68CF514D2B3FCB3B00CE5C67 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CE73BD282B357116004B8AD8 /* PromptView.swift */,
+				CE73BD2A2B35717D004B8AD8 /* ModelPickerView.swift */,
+				CE73BD2C2B3571F6004B8AD8 /* GuidanceScaleView.swift */,
+				CE73BD2E2B357251004B8AD8 /* StepsView.swift */,
+				CE73BD302B3572DE004B8AD8 /* SeedsView.swift */,
+				CE73BD322B392199004B8AD8 /* GenerateButton.swift */,
+				68CF51552B42B11600CE5C67 /* InfoButton.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		68CF514E2B3FCB5500CE5C67 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CE5F68912B2FE5C3004C9FD2 /* ColorPanelView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		CE5F68532B2C3D3C004C9FD2 = {
 			isa = PBXGroup;
 			children = (
@@ -168,10 +214,8 @@
 		CE5F685E2B2C3D3C004C9FD2 /* Draw */ = {
 			isa = PBXGroup;
 			children = (
-				CE73BD162B343465004B8AD8 /* Extensions */,
 				CE7F97012B32C03300709792 /* Views */,
 				CE5F685F2B2C3D3C004C9FD2 /* DrawApp.swift */,
-				CE5F68612B2C3D3C004C9FD2 /* ContentView.swift */,
 				CE5F68632B2C3D3C004C9FD2 /* Item.swift */,
 				CE5F68652B2C3D3D004C9FD2 /* Assets.xcassets */,
 				CE5F68672B2C3D3D004C9FD2 /* Draw.entitlements */,
@@ -211,6 +255,8 @@
 			children = (
 				68CF514A2B3FB52500CE5C67 /* Styles */,
 				CE73BD1C2B35673E004B8AD8 /* URL+Extensions.swift */,
+				68CF514F2B3FD13100CE5C67 /* View+Extensions.swift */,
+				68CF51532B3FF0FA00CE5C67 /* Double+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -237,13 +283,14 @@
 		CE7F96FF2B32BFC100709792 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				CE73BD212B356E00004B8AD8 /* Context */,
-				CE73BD1E2B356C6B004B8AD8 /* Models */,
-				CE7F97002B32BFD600709792 /* Pipeline */,
-				CE7F97022B32C0B600709792 /* StableDiffusionProgress.swift */,
+				CE73BD242B356E8C004B8AD8 /* FolderObserver.swift */,
 				CE7F96F92B31803100709792 /* GenerationState.swift */,
 				CE7F96F52B31441800709792 /* Settings.swift */,
-				CE73BD242B356E8C004B8AD8 /* FolderObserver.swift */,
+				CE7F97022B32C0B600709792 /* StableDiffusionProgress.swift */,
+				CE73BD212B356E00004B8AD8 /* Context */,
+				CE73BD162B343465004B8AD8 /* Extensions */,
+				CE73BD1E2B356C6B004B8AD8 /* Models */,
+				CE7F97002B32BFD600709792 /* Pipeline */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -262,17 +309,11 @@
 		CE7F97012B32C03300709792 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				CE7F96EA2B3040B900709792 /* MainView.swift */,
-				CE73BD142B341DE6004B8AD8 /* ControlView.swift */,
-				CE5F688F2B2C4515004C9FD2 /* DrawView.swift */,
+				CE5F68612B2C3D3C004C9FD2 /* ContentView.swift */,
 				CE7F96E82B30408600709792 /* GenerationView.swift */,
-				CE5F68912B2FE5C3004C9FD2 /* ColorPanelView.swift */,
-				CE73BD282B357116004B8AD8 /* PromptView.swift */,
-				CE73BD2A2B35717D004B8AD8 /* ModelPickerView.swift */,
-				CE73BD2C2B3571F6004B8AD8 /* GuidanceScaleView.swift */,
-				CE73BD2E2B357251004B8AD8 /* StepsView.swift */,
-				CE73BD302B3572DE004B8AD8 /* SeedsView.swift */,
-				CE73BD322B392199004B8AD8 /* GenerateButton.swift */,
+				CE7F96EA2B3040B900709792 /* MainView.swift */,
+				68CF514B2B3FCAE900CE5C67 /* ControlView */,
+				68CF514C2B3FCB1E00CE5C67 /* DrawView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -417,12 +458,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE73BD2B2B35717D004B8AD8 /* ModelPickerView.swift in Sources */,
+				68CF51502B3FD13100CE5C67 /* View+Extensions.swift in Sources */,
 				CE7F97032B32C0B600709792 /* StableDiffusionProgress.swift in Sources */,
 				CE73BD182B343483004B8AD8 /* Text+Style.swift in Sources */,
 				CE7F96FC2B3180A100709792 /* GenerationContext.swift in Sources */,
+				68CF51562B42B11600CE5C67 /* InfoButton.swift in Sources */,
 				CE7F96F42B31366000709792 /* Pipeline.swift in Sources */,
 				CE7F96FA2B31803100709792 /* GenerationState.swift in Sources */,
 				CE7F97072B32C16200709792 /* GenerationResult.swift in Sources */,
+				68CF51542B3FF0FA00CE5C67 /* Double+Extensions.swift in Sources */,
 				CE7F96FE2B31905400709792 /* ModelInfo.swift in Sources */,
 				CE5F68622B2C3D3C004C9FD2 /* ContentView.swift in Sources */,
 				CE73BD292B357116004B8AD8 /* PromptView.swift in Sources */,

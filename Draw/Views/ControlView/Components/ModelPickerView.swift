@@ -48,7 +48,10 @@ class ModelPickerController: ObservableObject {
     private func loaderPipeline(loader: PipelineLoader) {
         Task {
             do {
-                pipeline = try await loader.load()
+//                pipeline = try await loader.load()
+                
+                await loader.testLoading()
+                
             }
             catch {
                 pipeline = nil
@@ -60,9 +63,7 @@ class ModelPickerController: ObservableObject {
 struct ModelPickerView: View {
     
     @EnvironmentObject private var generationCtx: GenerationContext
-    
     @EnvironmentObject private var folderCtx: FolderContext
-    
     @ObservedObject private var controller = ModelPickerController()
     
     var body: some View {
@@ -70,7 +71,14 @@ struct ModelPickerView: View {
             .style(.control)
                 
         HStack {
+            Image(systemName: "")
+                .frame(width: 30, height: 30)
+            
             ProgressView()
+                .controlSize(.small)
+                .padding(.trailing, 8)
+                .isHidden(!controller.isLoading, remove: true)
+                
             Picker("\(controller.selection.name)", selection: $controller.selection) {
                 ForEach(folderCtx.cores, id: \.self) {
                     Text(verbatim: $0.name).tag($0.name)
