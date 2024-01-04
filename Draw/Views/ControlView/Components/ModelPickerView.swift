@@ -3,7 +3,14 @@ import Combine
 import Dispatch
 
 class ModelPickerController: ObservableObject {
-        
+    
+    enum LoadState {
+        case wait
+        case loading
+        case loaded
+        case error
+    }
+    
     @Published
     var selection: CoreModel = .init(url: URL(string: "file:///")!, name: "")
     
@@ -13,14 +20,19 @@ class ModelPickerController: ObservableObject {
     @Published
     var isLoading: Bool = false
     
-    private var loaderSubscriber: Cancellable?
+    @Published
+    var state: LoadState = .wait
     
+    private var loaderSubscriber: Cancellable?
     private let maxSeed: UInt32 = UInt32.max // TODO: -
     
+    @MainActor
     func onChange(from oldState: CoreModel? = nil, to newState: CoreModel) {
         guard !newState.name.isEmpty else {
             return
         }
+        
+        updateState(.loading)
         
         let loader = PipelineLoader(
             coreModel: newState,
@@ -41,22 +53,32 @@ class ModelPickerController: ObservableObject {
             .sink { [weak self] in
                 self?.isLoading = $0
             }
-
+        
         loaderPipeline(loader: loader)
     }
     
     private func loaderPipeline(loader: PipelineLoader) {
         Task {
             do {
-//                pipeline = try await loader.load()
-                
-                await loader.testLoading()
-                
+                let pipeline = try await loader.load()
+                await updatePipeline(pipeline)
+                await updateState(.loaded)
             }
             catch {
-                pipeline = nil
+                await updatePipeline(nil)
+                await updateState(.error)
             }
         }
+    }
+    
+    @MainActor
+    private func updatePipeline(_ pipeline: Pipeline?) {
+        self.pipeline = pipeline
+    }
+    
+    @MainActor
+    private func updateState(_ state: LoadState) {
+        self.state = state
     }
 }
 
@@ -66,19 +88,35 @@ struct ModelPickerView: View {
     @EnvironmentObject private var folderCtx: FolderContext
     @ObservedObject private var controller = ModelPickerController()
     
-    var body: some View {
-        Text("Model")
-            .style(.control)
-                
-        HStack {
-            Image(systemName: "")
-                .frame(width: 30, height: 30)
-            
+    @ViewBuilder
+    func icon(_ state: ModelPickerController.LoadState) -> some View {
+        
+        switch state {
+        case .loading:
             ProgressView()
                 .controlSize(.small)
                 .padding(.trailing, 8)
                 .isHidden(!controller.isLoading, remove: true)
-                
+            
+        case .error:
+            Image(systemName: "x.circle")
+            
+        case .loaded:
+            Image(systemName: "checkmark.circle")
+            
+        default:
+            EmptyView()
+        }
+    }
+    
+    var body: some View {
+        Text("Model")
+            .style(.control)
+        
+        HStack {
+            
+            icon(controller.state)
+            
             Picker("\(controller.selection.name)", selection: $controller.selection) {
                 ForEach(folderCtx.cores, id: \.self) {
                     Text(verbatim: $0.name).tag($0.name)

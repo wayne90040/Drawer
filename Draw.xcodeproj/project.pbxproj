@@ -42,7 +42,6 @@
 		CE7F96F42B31366000709792 /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F96F32B31366000709792 /* Pipeline.swift */; };
 		CE7F96F62B31441800709792 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F96F52B31441800709792 /* Settings.swift */; };
 		CE7F96F82B31464400709792 /* PipelineLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F96F72B31464400709792 /* PipelineLoader.swift */; };
-		CE7F96FA2B31803100709792 /* GenerationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F96F92B31803100709792 /* GenerationState.swift */; };
 		CE7F96FC2B3180A100709792 /* GenerationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F96FB2B3180A100709792 /* GenerationContext.swift */; };
 		CE7F96FE2B31905400709792 /* ModelInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F96FD2B31905400709792 /* ModelInfo.swift */; };
 		CE7F97032B32C0B600709792 /* StableDiffusionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F97022B32C0B600709792 /* StableDiffusionProgress.swift */; };
@@ -105,7 +104,6 @@
 		CE7F96F32B31366000709792 /* Pipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pipeline.swift; sourceTree = "<group>"; };
 		CE7F96F52B31441800709792 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		CE7F96F72B31464400709792 /* PipelineLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipelineLoader.swift; sourceTree = "<group>"; };
-		CE7F96F92B31803100709792 /* GenerationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationState.swift; sourceTree = "<group>"; };
 		CE7F96FB2B3180A100709792 /* GenerationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationContext.swift; sourceTree = "<group>"; };
 		CE7F96FD2B31905400709792 /* ModelInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelInfo.swift; sourceTree = "<group>"; };
 		CE7F97022B32C0B600709792 /* StableDiffusionProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableDiffusionProgress.swift; sourceTree = "<group>"; };
@@ -284,7 +282,6 @@
 			isa = PBXGroup;
 			children = (
 				CE73BD242B356E8C004B8AD8 /* FolderObserver.swift */,
-				CE7F96F92B31803100709792 /* GenerationState.swift */,
 				CE7F96F52B31441800709792 /* Settings.swift */,
 				CE7F97022B32C0B600709792 /* StableDiffusionProgress.swift */,
 				CE73BD212B356E00004B8AD8 /* Context */,
@@ -464,7 +461,6 @@
 				CE7F96FC2B3180A100709792 /* GenerationContext.swift in Sources */,
 				68CF51562B42B11600CE5C67 /* InfoButton.swift in Sources */,
 				CE7F96F42B31366000709792 /* Pipeline.swift in Sources */,
-				CE7F96FA2B31803100709792 /* GenerationState.swift in Sources */,
 				CE7F97072B32C16200709792 /* GenerationResult.swift in Sources */,
 				68CF51542B3FF0FA00CE5C67 /* Double+Extensions.swift in Sources */,
 				CE7F96FE2B31905400709792 /* ModelInfo.swift in Sources */,
@@ -651,7 +647,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Draw/Preview Content\"";
-				DEVELOPMENT_TEAM = 53Q6P6AQV8;
+				DEVELOPMENT_TEAM = W33F93UXW3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -690,7 +686,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Draw/Preview Content\"";
-				DEVELOPMENT_TEAM = 53Q6P6AQV8;
+				DEVELOPMENT_TEAM = W33F93UXW3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
