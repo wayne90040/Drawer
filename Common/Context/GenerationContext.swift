@@ -4,9 +4,6 @@ import Foundation
 import Dispatch
 import CoreGraphics
 
-let DEFAULT_PROMPT = ""
-let DEFAULT_NEGATIVE_PROMPT = ""
-
 class GenerationContext: ObservableObject {
     
     let scheduler = StableDiffusionScheduler.dpmSolverMultistepScheduler
@@ -23,28 +20,26 @@ class GenerationContext: ObservableObject {
                 }
         }
     }
-    
-    @Published var loaderState: PipelineLoader.PipelineLoaderState = .waiting
+
     @Published var state: GenerationState = .startup
-    @Published var prompt: String = DEFAULT_PROMPT
-    @Published var nevgativePrompt: String = DEFAULT_NEGATIVE_PROMPT
-    
-    @Published var steps: Double = 25
+    @Published var prompt: String = ""
+    @Published var nevgativePrompt: String = ""
+    @Published var count: Float = 1
+    @Published var steps: Double = 50
     @Published var seed: UInt32 = .zero
     
     /// 關鍵詞權重
     @Published var guidanceScale: Float = 7.5
     @Published var disableSafety: Bool = false
     
-//    @Published var computeUnits: MLComputeUnits =
+    var coreModelName: String = ""
     
     private var progressSubscriber: Cancellable?
     
     enum GenerationState {
         case startup
         case running(StableDiffusionProgress?)
-        /// prompt, cgImage, lastSeed, interval
-        case complete(String, CGImage?, UInt32, TimeInterval?)
+        case complete(GenerationResult)
         case userCanceled
         case failed(Error?)
     }
@@ -58,8 +53,10 @@ class GenerationContext: ObservableObject {
             throw GenerationContextError.pipelineIsNil
         }
         return try pipeline.text(
+            coreDataName: coreModelName,
             prompt: prompt,
             negativePrompt: nevgativePrompt,
+            imageCount: Int(count),
             scheduler: scheduler,
             stepCount: Int(steps),
             seed: seed,
@@ -72,6 +69,7 @@ class GenerationContext: ObservableObject {
             throw GenerationContextError.pipelineIsNil
         }
         return try pipeline.image(
+            coreDataName: coreModelName,
             prompt: prompt,
             start: start,
             scheduler: scheduler,
@@ -83,5 +81,21 @@ class GenerationContext: ObservableObject {
     
     func cancelGeneration() {
         pipeline?.setCancelled()
+    }
+    
+    // TODO: Refactor
+    func save(_ result: GenerationResult) {
+        let ai_Images = result.ai_images
+        
+        ai_Images.enumerated().forEach {
+            let url = Constants.imageURL.appending(path: "\($0.element.id)")
+            
+            do {
+                try $0.element.saveTo(url)
+            }
+            catch {
+                debugPrint(error)
+            }
+        }
     }
 }

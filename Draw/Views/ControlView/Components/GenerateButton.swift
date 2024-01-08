@@ -1,18 +1,34 @@
 import SwiftUI
 
+// TODO: Refactor
 struct GenerateButton: View {
     
     @EnvironmentObject var ctx: GenerationContext
     
-    var body: some View {
-        Button("Generate") {
-            generate()
+    var isRunning: Bool {
+        if case .running = ctx.state {
+            return true
         }
-        .disabled(ctx.pipeline == nil)
+        return false
+    }
+    
+    var body: some View {
+        Button {
+            generate()
+        } label: {
+            if isRunning {
+                Text("Generating...")
+            }
+            else {
+                Text("Generate")
+            }
+        }
+        .buttonStyle(.bordered)
+        .disabled(ctx.pipeline == nil || isRunning)
     }
     
     private func generate() {
-        if case .running = ctx.state {
+        if isRunning {
             return
         }
         
@@ -20,11 +36,8 @@ struct GenerateButton: View {
             ctx.state = .running(nil)
             do {
                 let result = try await ctx.textToImage()
-                ctx.state = .complete(
-                    ctx.prompt,
-                    result.image,
-                    result.lastSeed,
-                    result.interval)
+                ctx.save(result)
+                ctx.state = .complete(result)
             }
             catch {
                 ctx.state = .failed(error)

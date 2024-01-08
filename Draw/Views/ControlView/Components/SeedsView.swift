@@ -4,11 +4,12 @@ import CompactSlider
 struct SeedsView: View {
     
     @EnvironmentObject var context: GenerationContext
-    
+
     var body: some View {
         HStack {
             Text("Seeds")
                 .style(.control)
+            
             InfoButton {
                 VStack {
                     Text("Random seed which to start generation")
@@ -16,7 +17,10 @@ struct SeedsView: View {
                 .padding()
             }
         }
-        createSeedSlider()
+        HStack {
+            TextField("RANDOM", value: $context.seed, formatter: .seed)
+                .textFieldStyle(.roundedBorder)
+        }
     }
     
     private func createSeedSlider() -> some View {
@@ -33,6 +37,21 @@ struct SeedsView: View {
         }
         .padding(.bottom, 5)
     }
+}
+
+extension Formatter {
+    static let seed: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimum = 0
+        formatter.maximum = NSNumber(value: UInt32.max)
+        formatter.maximumFractionDigits = 0
+        formatter.usesGroupingSeparator = false
+        formatter.hasThousandSeparators = false
+        formatter.alwaysShowsDecimalSeparator = false
+        formatter.zeroSymbol = ""
+        return formatter
+    }()
 }
 
 #Preview {

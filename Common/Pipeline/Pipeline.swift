@@ -31,8 +31,10 @@ class Pipeline {
     }
     
     func text(
+        coreDataName: String,
         prompt: String,
         negativePrompt: String,
+        imageCount: Int,
         scheduler: StableDiffusionScheduler,
         stepCount: Int,
         seed: UInt32,
@@ -41,27 +43,42 @@ class Pipeline {
     ) throws -> GenerationResult {
         canceled = false
         
+        let newSeed: UInt32 = seed == .zero ? .random(in: 0 ..< .max) : seed
+        
         var config = StableDiffusionPipeline.Configuration(prompt: prompt)
         config.negativePrompt = negativePrompt
         config.stepCount = stepCount
-        config.seed = seed
+        config.seed = newSeed
         config.guidanceScale = guidanceScale
         config.disableSafety = disableSafety
         config.schedulerType = scheduler
+        config.imageCount = imageCount
         config.useDenoisedIntermediates = true
         if isXL {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025
             config.schedulerTimestepSpacing = .karras
         }
-        let images = try pipeline.generateImages(configuration: config) { _ in
+        
+        let images = try pipeline.generateImages(configuration: config) {
+            handleProgress(.init(progress: $0))
             return !canceled
         }
-        let image = images.compactMap { $0 }.first
-        return .init(image: image, lastSeed: seed, userCanceled: canceled)
+        
+        return .init(
+            images: images.compactMap { $0 },
+            prompt: prompt,
+            nevgativePrompt: negativePrompt,
+            steps: stepCount,
+            seeds: newSeed,
+            guidanceScale: guidanceScale,
+            timestamp: Date.today.timeIntervalSince1970,
+            userCanceled: canceled,
+            coreModelName: coreDataName)
     }
     
     func image(
+        coreDataName: String,
         prompt: String,
         start: CGImage?,
         scheduler: StableDiffusionScheduler,
@@ -91,8 +108,17 @@ class Pipeline {
             handleProgress(.init(progress: progress))
             return !canceled
         }
-        let image = images.compactMap { $0 }.first
-        return .init(image: image, lastSeed: seed, userCanceled: canceled)
+
+        return .init(
+            images: images.compactMap { $0 },
+            prompt: prompt,
+            nevgativePrompt: "",
+            steps: stepCount,
+            seeds: seed,
+            guidanceScale: guidanceScale,
+            timestamp: Date.today.timeIntervalSince1970,
+            userCanceled: canceled,
+            coreModelName: coreDataName)
     }
     
     func setCancelled() {

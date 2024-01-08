@@ -54,12 +54,6 @@ class PipelineLoader {
         }
     }
     
-    func testLoading() async {
-        state = .loading
-        sleep(5)
-        state = .loaded
-    }
-    
     private var coreModelURL: URL {
         switch attentionVariant {
         case .original:

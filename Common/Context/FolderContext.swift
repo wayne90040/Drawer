@@ -1,10 +1,17 @@
 import Foundation
 import Combine
+import CoreGraphics
+import ImageIO
 
+
+// TODO: 移除 AI_Image 
 class FolderContext: ObservableObject {
 
     @Published
     private(set) var cores: [CoreModel] = []
+    
+    @Published
+    private(set) var ai_Images: [AI_Image] = []
     
     private var defaultURL: URL {
         FileManager.default.homeDirectoryForCurrentUser.appending(path: "Drawer")
@@ -46,13 +53,6 @@ class FolderContext: ObservableObject {
                 self?.loadModels()
             }
             .store(in: &cancellables)
-        
-        imageObserver.onChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.loadImages()
-            }
-            .store(in: &cancellables)
     }
     
     private func loadModels() {
@@ -60,9 +60,5 @@ class FolderContext: ObservableObject {
         cores = modelURL.subDirectories.map {
             .init(url: $0, name: $0.lastPathComponent)
         }
-    }
-    
-    private func loadImages() {
-        
     }
 }

@@ -5,22 +5,24 @@ import CoreML
 import Dispatch
 
 struct MainView: View {
-    
     @StateObject var generationContext = GenerationContext()
-    @StateObject var folderContext = FolderContext()
+    @State var selected: AI_Image? = nil
     
     let maxSeed: UInt32 = UInt32.max
     
     var body: some View {
         NavigationSplitView {
             ControlView()
-                .navigationSplitViewColumnWidth(min: 200, ideal: 250)
+        } content: {
+            GenerationView(selected: $selected)
         } detail: {
-            GenerationView()
+            InfoView(ai_Image: selected)
         }
-        .frame(minHeight: 300)
+        .toolbar {
+            GeneratedProgressView()
+                .frame(width: 200, height: 30)
+        }
         .environmentObject(generationContext)
-        .environmentObject(folderContext)
     }
 }
 

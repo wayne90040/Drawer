@@ -17,8 +17,9 @@ struct GuidanceScaleView: View {
                 .padding()
             }
         }
-        
-        CompactSlider(value: $context.guidanceScale, in: 1...20, step: 0.5) {
+        CompactSlider(value: $context.guidanceScale,
+                      in: Constants.GuidanceScale.MIN...Constants.GuidanceScale.MAX,
+                      step: 0.5) {
             Text("Guidance Scale")
             Spacer()
             Text("\(context.guidanceScale.format(".1"))")

@@ -2,101 +2,44 @@ import SwiftUI
 import Combine
 import Dispatch
 
-class ModelPickerController: ObservableObject {
+struct ModelPickerView: View {
+    @EnvironmentObject private var generationCtx: GenerationContext
     
-    enum LoadState {
-        case wait
-        case loading
-        case loaded
-        case error
-    }
+    @StateObject private var folderCtx = FolderContext()
+    @StateObject private var viewModel = ModelPickerViewModel()
     
-    @Published
-    var selection: CoreModel = .init(url: URL(string: "file:///")!, name: "")
-    
-    @Published
-    var pipeline: Pipeline?
-    
-    @Published
-    var isLoading: Bool = false
-    
-    @Published
-    var state: LoadState = .wait
-    
-    private var loaderSubscriber: Cancellable?
-    private let maxSeed: UInt32 = UInt32.max // TODO: -
-    
-    @MainActor
-    func onChange(from oldState: CoreModel? = nil, to newState: CoreModel) {
-        guard !newState.name.isEmpty else {
-            return
-        }
+    var body: some View {
+        Text("Model")
+            .style(.control)
         
-        updateState(.loading)
-        
-        let loader = PipelineLoader(
-            coreModel: newState,
-            computeUnits: .cpuAndNeuralEngine,
-            maxSeed: maxSeed,
-            attentionVariant: .splitEinsum)
-        
-        loaderSubscriber = loader.statePublisher
-            .map {
-                switch $0 {
-                case .loading:
-                    return true
-                default:
-                    return false
+        HStack {
+            icon(viewModel.state)
+            Picker("\(viewModel.selection.name)", selection: $viewModel.selection) {
+                ForEach(folderCtx.cores, id: \.self) {
+                    Text(verbatim: $0.name).tag($0.name)
                 }
             }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.isLoading = $0
-            }
-        
-        loaderPipeline(loader: loader)
-    }
-    
-    private func loaderPipeline(loader: PipelineLoader) {
-        Task {
-            do {
-                let pipeline = try await loader.load()
-                await updatePipeline(pipeline)
-                await updateState(.loaded)
-            }
-            catch {
-                await updatePipeline(nil)
-                await updateState(.error)
-            }
+            .onChange(of: viewModel.selection, perform: {
+                viewModel.onChange(to: $0)
+            })
+            .disabled(viewModel.isLoading)
+            .labelsHidden()
+        }
+        .onReceive(viewModel.$pipeline) {
+            generationCtx.coreModelName = viewModel.selection.name
+            generationCtx.pipeline = $0
         }
     }
     
-    @MainActor
-    private func updatePipeline(_ pipeline: Pipeline?) {
-        self.pipeline = pipeline
-    }
-    
-    @MainActor
-    private func updateState(_ state: LoadState) {
-        self.state = state
-    }
-}
-
-struct ModelPickerView: View {
-    
-    @EnvironmentObject private var generationCtx: GenerationContext
-    @EnvironmentObject private var folderCtx: FolderContext
-    @ObservedObject private var controller = ModelPickerController()
-    
     @ViewBuilder
-    func icon(_ state: ModelPickerController.LoadState) -> some View {
+    private func icon(_ state: ModelPickerViewModel.LoadState) -> some View {
         
         switch state {
         case .loading:
             ProgressView()
                 .controlSize(.small)
                 .padding(.trailing, 8)
-                .isHidden(!controller.isLoading, remove: true)
+                .isHidden(!viewModel.isLoading, remove: true)
             
         case .error:
             Image(systemName: "x.circle")
@@ -106,30 +49,6 @@ struct ModelPickerView: View {
             
         default:
             EmptyView()
-        }
-    }
-    
-    var body: some View {
-        Text("Model")
-            .style(.control)
-        
-        HStack {
-            
-            icon(controller.state)
-            
-            Picker("\(controller.selection.name)", selection: $controller.selection) {
-                ForEach(folderCtx.cores, id: \.self) {
-                    Text(verbatim: $0.name).tag($0.name)
-                }
-            }
-            .onChange(of: controller.selection, perform: {
-                controller.onChange(to: $0)
-            })
-            .disabled(controller.isLoading)
-            .labelsHidden()
-        }
-        .onReceive(controller.$pipeline) {
-            generationCtx.pipeline = $0
         }
     }
 }

@@ -1,32 +1,31 @@
 import SwiftUI
 import CompactSlider
 
-struct StepsView: View {
+struct CountView: View {
     
     @EnvironmentObject var context: GenerationContext
     
     var body: some View {
         HStack {
-            Text("Steps")
+            Text("Count")
                 .style(.control)
             
             InfoButton {
                 VStack {
-                    Text("Number of inference steps to perform")
+                    Text("Number of image to generate")
                 }
                 .padding()
             }
         }
-        CompactSlider(value: $context.steps,
-                      in: Constants.Steps.MIN...Constants.Steps.MAX,
-                      step: 1.0) {
-            Text("Steps")
+        
+        CompactSlider(value: $context.count, in: 1...10, step: 1.0) {
+            Text("Count")
             Spacer()
-            Text("\(context.steps.format(".0"))")
+            Text("\(context.count.format(".0"))")
         }
     }
 }
 
 #Preview {
-    StepsView()
+    CountView()
 }

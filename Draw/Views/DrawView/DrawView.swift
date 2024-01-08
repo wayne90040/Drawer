@@ -67,17 +67,17 @@ struct DrawView: View {
 
     private func generate() {
         if case .running = generationContext.state { return }
-        Task {
-            generationContext.state = .running(nil)
-            do {
-                let renderer = ImageRenderer(content: drawer)
-                let result = try await generationContext.textToImage()
-                generationContext.state = .complete(generationContext.prompt, result.image, result.lastSeed, result.interval)
-            }
-            catch {
-                generationContext.state = .failed(error)
-            }
-        }
+//        Task {
+//            generationContext.state = .running(nil)
+//            do {
+//                let renderer = ImageRenderer(content: drawer)
+//                let result = try await generationContext.textToImage()
+//                generationContext.state = .complete(generationContext.prompt, result.image, result.lastSeed, result.interval)
+//            }
+//            catch {
+//                generationContext.state = .failed(error)
+//            }
+//        }
     }
 }
 

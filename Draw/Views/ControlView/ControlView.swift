@@ -23,6 +23,9 @@ struct ControlView: View {
                 StepsView()
                     .padding(.bottom, 5)
                 
+                CountView()
+                    .padding(.bottom, 5)
+                
                 SeedsView()
                 
                 Divider()

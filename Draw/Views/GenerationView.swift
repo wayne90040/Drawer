@@ -2,56 +2,38 @@ import SwiftUI
 import StableDiffusion
 
 struct GenerationView: View {
-    @EnvironmentObject var generationContext: GenerationContext
+    @StateObject var imageCtx = ImageFolderContext()
+    @Binding var selected: AI_Image?
     
-    @ViewBuilder
+    let gridLayout = [GridItem(.adaptive(minimum: 150), spacing: 16)]
+    
+    init(selected: Binding<AI_Image?>) {
+        self._selected = selected
+    }
+    
     var body: some View {
-
-        switch generationContext.state {
-        case .startup:
-//            Image("a_high_quality_photo_of_a_surfing_dog.7667.final_3.41-bits.png")
-            Text("start up")
-            
-        case .running(let progress):
-            if let progress = progress {
-                let step = progress.step + 1
-                let fraction = Double(step) / Double(progress.stepCount)
-                let label = "Step \(step) of \(progress.stepCount)"
-                HStack {
-                    ProgressView(label, value: fraction, total: 1)
-                    Button("Cancel") {
-                        generationContext.cancelGeneration()
-                    }
+        ScrollView {
+            LazyVGrid(columns: gridLayout) {
+                ForEach(imageCtx.ai_Images) { ai_image in
+                    Image(ai_image.image, scale: 1, label: Text(""))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .overlay {
+                            if let selected, selected.id == ai_image.id {
+                                RoundedRectangle(cornerRadius: 1)
+                                    .stroke(Color.accentColor, lineWidth: 3)
+                            }
+                        }
+                        .onTapGesture {
+                            selected = ai_image
+                        }
                 }
-                .padding()
             }
-            else {
-                ProgressView()
-            }
-            
-        case .complete(_, let cgImage, _, _):
-            if let cgImage = cgImage {
-                Image(cgImage, scale: 1, label: Text(""))
-                    .resizable()
-            }
-            else {
-                Text("Complete")
-            }
-            
-        case .userCanceled:
-            Text("User cancel")
-            
-        case .failed(let error):
-            if let error = error {
-                Text("Failed \(error.localizedDescription)")
-            }
-            else {
-                Text("Failed")
-            }
+            .padding()
         }
     }
 }
 
 #Preview {
-    GenerationView()
+    GenerationView(selected: .constant(nil))
 }
